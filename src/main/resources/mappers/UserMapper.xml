@@ -152,8 +152,23 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  <select id="selectByUsername" resultType="BaseResultMap" parameterType="string">
-    select * from mmall_user where username = ${username}
+  <select id="selectByUsername" resultType="int" parameterType="string">
+    select count(1) from mmall_user
+    where username = #{username}
   </select>
+
+  <select id="checkUsername" resultType="int" parameterType="string" >
+    select count(1) from mmall_user
+    where username = #{username}
+  </select>
+
+  <select id="selectLogin" resultMap="BaseResultMap" parameterType="map">
+    select <include refid="Base_Column_List" />
+    from mmall_user
+    where username = #{username}
+    and password = #{password}
+  </select>
+
+
 
 </mapper>

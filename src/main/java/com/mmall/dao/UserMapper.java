@@ -1,6 +1,7 @@
 package com.mmall.dao;
 
 import com.mmall.pojo.User;
+import org.apache.ibatis.annotations.Param;
 
 public interface UserMapper {
     int deleteByPrimaryKey(Integer id);
@@ -20,5 +21,13 @@ public interface UserMapper {
      * @param username
      * @return
 	 */
-    User selectByUsername(String username);
+    int selectByUsername(String username);
+
+    /**
+     * 登录
+     * @param username
+     * @param md5Password
+     * @return
+     */
+    User selectLogin(@Param(value = "username") String username, @Param("password") String md5Password);
 }

@@ -20,8 +20,8 @@ public class UserDaoTest {
 
 	@Test
 	public void checkUsernameTest(){
-		User u = userMapper.selectByUsername("aaa");
-		System.out.println(u.getEmail());
+		int i = userMapper.selectByUsername("aaa");
+		System.out.println(i);
 	}
 
 }
