@@ -8,8 +8,20 @@
 	http://www.springframework.org/schema/mvc
 	http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-    <context:component-scan base-package="com.mmall" annotation-config="true"/>
 
+    <context:component-scan base-package="com.mmall" annotation-config="true"/>
+    <!--2.静态资源默认servlet配置-->
+    <!--
+        1).加入对静态资源处理：js,gif,png
+        2).允许使用 "/" 做整体映射
+    -->
+    <mvc:default-servlet-handler/>
+
+    <!--配置spring mvc-->
+    <!--1,开启springmvc注解模式
+    a.自动注册DefaultAnnotationHandlerMapping,AnnotationMethodHandlerAdapter
+    b.默认提供一系列的功能:数据绑定，数字和日期的format@NumberFormat,@DateTimeFormat
+    c:xml,json的默认读写支持-->
     <mvc:annotation-driven>
         <mvc:message-converters>
             <bean class="org.springframework.http.converter.StringHttpMessageConverter">
@@ -20,6 +32,7 @@
                     </list>
                 </property>
             </bean>
+            <!--配置response header类型-->
             <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
                 <property name="supportedMediaTypes">
                     <list>
@@ -31,11 +44,10 @@
     </mvc:annotation-driven>
 
 
-
     <!-- 文件上传 -->
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <property name="maxUploadSize" value="10485760"/> <!-- 10m -->
-        <property name="maxInMemorySize" value="4096" />
+        <property name="maxInMemorySize" value="4096"/>
         <property name="defaultEncoding" value="UTF-8"></property>
     </bean>
 

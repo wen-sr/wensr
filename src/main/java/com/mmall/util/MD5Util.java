@@ -31,7 +31,7 @@ public class MD5Util {
      * @param charsetname
      * @return
      */
-    public static String MD5Encode(String origin, String charsetname) {
+    private static String MD5Encode(String origin, String charsetname) {
         String resultString = null;
         try {
             resultString = new String(origin);
