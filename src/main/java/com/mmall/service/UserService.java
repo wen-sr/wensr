@@ -12,7 +12,7 @@ public interface UserService {
 
 	ServerResponse<String> checkValid(String username, String type);
 
-    ServerResponse<User> register(User user);
+    ServerResponse<String> register(User user);
 
 	ServerResponse<String> forgetGetQuestion(String username);
 

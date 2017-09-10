@@ -61,8 +61,8 @@ public class UserController{
      */
     @RequestMapping(value = "/check_valid.do",method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<String> checkUsername(String str) {
-        return userService.checkValid(str,Constant.USERNAME);
+    public ServerResponse<String> checkUsername(String str, String type) {
+        return userService.checkValid(str, type);
     }
 
     /**
@@ -72,7 +72,7 @@ public class UserController{
      */
     @RequestMapping(value = "/register.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<User> register(User user){
+    public ServerResponse<String> register(User user){
         return userService.register(user);
     }
 

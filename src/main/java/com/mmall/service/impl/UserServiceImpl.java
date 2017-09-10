@@ -35,7 +35,6 @@ public class UserServiceImpl implements UserService {
 			return ServerResponse.createByErrorMessage("密码错误");
 		}
 		user.setPassword(org.apache.commons.lang3.StringUtils.EMPTY);
-
 		return ServerResponse.createBySuccess("登录成功",user);
 	}
 
@@ -57,6 +56,8 @@ public class UserServiceImpl implements UserService {
 				if(userMapper.checkEmail(str) > 0 ){
 					return ServerResponse.createByErrorMessage("Email已存在");
 				}
+			}else{
+				return ServerResponse.createByErrorMessage("参数无效");
 			}
 			return ServerResponse.createBySuccessMsg("验证通过");
 		}else {
@@ -70,7 +71,7 @@ public class UserServiceImpl implements UserService {
 	 * @return
 	 */
     @Override
-    public ServerResponse<User> register(User user) {
+    public ServerResponse<String> register(User user) {
 		if(!this.checkValid(user.getUsername(),Constant.USERNAME).isSuccess()){
 			return ServerResponse.createByErrorMessage("用户名已存在");
 		}
@@ -82,7 +83,7 @@ public class UserServiceImpl implements UserService {
 		user.setPassword(MD5Util.MD5EncodeUtf8(user.getPassword()));
 		int i = userMapper.insert(user);
 		if(i > 0 ){
-			return ServerResponse.createBySuccess("注册成功", user);
+			return ServerResponse.createBySuccess("注册成功");
 		}
         return ServerResponse.createByErrorMessage("注册失败");
     }
