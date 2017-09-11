@@ -30,6 +30,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.projectlombok:lombok:1.16.6" level="project" />
     <orderEntry type="library" name="Maven: org.apache.tomcat:tomcat-catalina:8.5.15" level="project" />
     <orderEntry type="library" name="Maven: org.apache.tomcat:tomcat-servlet-api:8.5.15" level="project" />
     <orderEntry type="library" name="Maven: org.apache.tomcat:tomcat-jsp-api:8.5.15" level="project" />

@@ -188,4 +188,21 @@
     from mmall_product
     where parent_id = #{categoryId}
   </select>
+    <select id="selectList" resultMap="BaseResultMap">
+      select <include refid="Base_Column_List"/>
+      from mmall_product
+      order by id asc
+  </select>
+    <select id="selectByProductNameAndId" resultMap="BaseResultMap" parameterType="map">
+      select <include refid="Base_Column_List"/>
+        from mmall_product
+        <where>
+            <if test="productId != null">
+                and product_id = #{productId}
+            </if>
+            <if test="productName != null ">
+                and productName = #{productName}
+            </if>
+        </where>
+    </select>
 </mapper>
