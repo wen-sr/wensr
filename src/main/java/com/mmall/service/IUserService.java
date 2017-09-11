@@ -6,7 +6,7 @@ import com.mmall.pojo.User;
 /**
  * Created by wen-sr on 2017/8/23.
  */
-public interface UserService {
+public interface IUserService {
 
 	ServerResponse<User> login(String username, String password);
 

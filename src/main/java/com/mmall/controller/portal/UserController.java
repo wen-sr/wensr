@@ -4,8 +4,7 @@ import com.mmall.common.Constant;
 import com.mmall.common.ResponseCode;
 import com.mmall.common.ServerResponse;
 import com.mmall.pojo.User;
-import com.mmall.service.UserService;
-import org.apache.catalina.Server;
+import com.mmall.service.IUserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by wen-sr on 2017/8/23.
@@ -25,7 +22,7 @@ import java.util.Map;
 public class UserController{
 
     @Autowired
-    private UserService userService;
+    private IUserService IUserService;
 
     /**
      * 登录
@@ -36,7 +33,7 @@ public class UserController{
     @RequestMapping(value = "/login.do", method = {RequestMethod.POST})
     @ResponseBody
     public ServerResponse<User> login(String username, String password, HttpSession session) {
-        ServerResponse<User> response = userService.login(username, password);
+        ServerResponse<User> response = IUserService.login(username, password);
         if(response != null){
             session.setAttribute(Constant.CURRENT_USER,response.getData());
         }
@@ -62,7 +59,7 @@ public class UserController{
     @RequestMapping(value = "/check_valid.do",method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<String> checkUsername(String str, String type) {
-        return userService.checkValid(str, type);
+        return IUserService.checkValid(str, type);
     }
 
     /**
@@ -73,7 +70,7 @@ public class UserController{
     @RequestMapping(value = "/register.do", method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<String> register(User user){
-        return userService.register(user);
+        return IUserService.register(user);
     }
 
     /**
@@ -99,7 +96,7 @@ public class UserController{
     @RequestMapping(value = "/forget_get_question.do", method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<String> forgetGetQuestion(String username){
-        return userService.forgetGetQuestion(username);
+        return IUserService.forgetGetQuestion(username);
     }
 
     /**
@@ -112,7 +109,7 @@ public class UserController{
     @RequestMapping(value = "forget_check_answer.do", method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<String> forgetCheckAnswer(String username,String question, String answer){
-        return userService.checkAnswer(username, question, answer);
+        return IUserService.checkAnswer(username, question, answer);
     }
 
     /**
@@ -125,7 +122,7 @@ public class UserController{
     @RequestMapping(value = "forget_reset_password.do", method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<String> forgetResetPassword(String username, String passwdNew, String forgetToken){
-        return userService.forgetResetPasswd(username, passwdNew, forgetToken);
+        return IUserService.forgetResetPasswd(username, passwdNew, forgetToken);
     }
 
     /**
@@ -145,7 +142,7 @@ public class UserController{
         }
         User user2 = new User();
         user2.setId(user.getId());
-        return userService.resetPassword(user2,passwordOld, passwordNew);
+        return IUserService.resetPassword(user2,passwordOld, passwordNew);
     }
 
     /**
@@ -167,7 +164,7 @@ public class UserController{
             return ServerResponse.createByErrorMessage("密码不允许修改");
         }
         user.setId(u.getId());
-        return userService.updateUserInfo(user);
+        return IUserService.updateUserInfo(user);
     }
 
 
