@@ -22,11 +22,17 @@ public class ProductController {
     @RequestMapping(value = "list.do", method = RequestMethod.POST)
     public ServerResponse list(@RequestParam(value = "categoryId", required = false) Integer categoryId,
                                @RequestParam(value = "keyword", required = false) String keyword,
-                               @RequestParam(value = "pageNum", defaultValue = "0") int pageNum,
-                               @RequestParam(value = "pageSize", defaultValue = "5") int PageSize,
+                               @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+                               @RequestParam(value = "pageSize", defaultValue = "2") int PageSize,
                                @RequestParam(value = "orderBy", defaultValue = "") String orderBy){
 
         return iProductService.list(categoryId, keyword, pageNum, PageSize, orderBy);
+    }
+
+
+    @RequestMapping(value = "detail.do", method = RequestMethod.POST)
+    public ServerResponse detail(Integer productId){
+        return iProductService.getProductDetailById(productId);
     }
 }
 

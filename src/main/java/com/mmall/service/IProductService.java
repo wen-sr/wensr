@@ -23,4 +23,5 @@ public interface IProductService {
 
     ServerResponse getManageProductSearch(Integer productId, String productName, int pageNum, int pageSize);
 
+    ServerResponse getManageProductDetailById(Integer productId);
 }

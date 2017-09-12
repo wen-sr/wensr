@@ -2,6 +2,8 @@ package com.mmall.service;
 
 import com.mmall.common.ServerResponse;
 
+import java.util.List;
+
 /**
  * Description:
  * User: wen-sr
@@ -14,5 +16,5 @@ public interface ICategoryService {
 
     ServerResponse setCategoryName(int categoryId, String categoryName);
 
-    ServerResponse getDeepCategory(int categoryId);
+    ServerResponse<List<Integer>> getDeepCategory(int categoryId);
 }

@@ -3,6 +3,7 @@ package com.mmall.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
+import com.mmall.common.Constant;
 import com.mmall.common.ResponseCode;
 import com.mmall.common.ServerResponse;
 import com.mmall.dao.CategoryMapper;
@@ -34,6 +35,9 @@ public class ProductServiceImpl implements IProductService {
 
     @Autowired
     CategoryMapper categoryMapper;
+
+    @Autowired
+    ICategoryService iCategoryService;
 
     /**
      * 新增或更新产品信息
@@ -84,13 +88,45 @@ public class ProductServiceImpl implements IProductService {
         if(categoryId == null && StringUtils.isBlank(keyword)){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), "请求的类目id和关键字错误");
         }
-        List<Product> productList = Lists.newArrayList();
-        if (categoryId != null ){
-            productList = productMapper.selectByCategoryId(categoryId);
+
+        if(StringUtils.isNotBlank(keyword)){
+            keyword = new StringBuffer("%").append(keyword).append("%").toString();
+        }
+
+        List<Integer> categoryIdList = Lists.newArrayList();
+        if(categoryId != null) {
+            categoryIdList = iCategoryService.getDeepCategory(categoryId).getData();
+        }
+
+        if(categoryIdList.size() == 0 && StringUtils.isBlank(keyword)){
+            //如果查询的类目不存在，且关键字为空，则返回空分页对象
+            PageHelper.offsetPage(pageNum, pageSize);
+            return ServerResponse.createBySuccess(new PageInfo());
+        }
+
+        PageHelper.startPage(pageNum, pageSize);
+
+        //排序
+        if(StringUtils.isNotBlank(orderBy)){
+            if(Constant.ProductOrderBy.PRICE_ORDER_BY.contains(StringUtils.lowerCase(orderBy))){
+                String[] orderByArray = orderBy.split("_");
+                PageHelper.orderBy(orderByArray[0] + " " + orderByArray[1]);
+            }
         }
 
 
-        return null;
+        List<Product> productList = productMapper.selectByProductNameAndCategoryId(StringUtils.isBlank(keyword) ? null: keyword, categoryIdList.size() == 0 ? null : categoryIdList);
+
+        List<ProductListVo> productListVoList = Lists.newArrayList();
+        for(Product p : productList) {
+            ProductListVo pv = this.assembleProductListVo(p);
+            productListVoList.add(pv);
+        }
+
+        PageInfo pageInfo = new PageInfo(productList);
+        pageInfo.setList(productListVoList);
+
+        return ServerResponse.createBySuccess(pageInfo);
     }
 
     @Override
@@ -103,9 +139,29 @@ public class ProductServiceImpl implements IProductService {
             return ServerResponse.createByErrorMessage("该商品已下架或删除");
         }
 
+        if(product.getStatus() != Constant.productStatus.ON_SELL.getCode()){
+            return ServerResponse.createByErrorMessage("该商品已下架");
+        }
+
         ProductDetailVo productDetailVo = this.assembleProductDetailVo(product);
         return ServerResponse.createBySuccess(productDetailVo);
     }
+
+
+    @Override
+    public ServerResponse getManageProductDetailById(Integer productId) {
+        if(productId == null){
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), "传入的参数错误");
+        }
+        Product product = productMapper.selectByPrimaryKey(productId);
+        if(product == null) {
+            return ServerResponse.createByErrorMessage("该商品已下架或删除");
+        }
+
+        ProductDetailVo productDetailVo = this.assembleProductDetailVo(product);
+        return ServerResponse.createBySuccess(productDetailVo);
+    }
+
 
     @Override
     public ServerResponse setSaleStatus(Integer productId, Integer status) {

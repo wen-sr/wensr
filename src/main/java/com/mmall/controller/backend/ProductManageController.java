@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.mmall.common.Constant;
 import com.mmall.common.ResponseCode;
 import com.mmall.common.ServerResponse;
+import com.mmall.pojo.Product;
 import com.mmall.pojo.User;
 import com.mmall.service.IFileService;
 import com.mmall.service.IProductService;
@@ -37,9 +38,14 @@ public class ProductManageController {
     @Autowired
     IFileService iFileService;
 
+    @RequestMapping(value = "save.do", method = RequestMethod.POST)
+    public ServerResponse productSave(Product product, HttpSession session) {
+        return iProductService.saveOrUpdateProduct(product);
+    }
+
     @RequestMapping(value = "detail.do", method = RequestMethod.POST)
     public ServerResponse getProductDetailById(Integer productId) {
-        return iProductService.getProductDetailById(productId);
+        return iProductService.getManageProductDetailById(productId);
     }
 
     @RequestMapping(value = "set_sale_status.do", method = RequestMethod.POST)
